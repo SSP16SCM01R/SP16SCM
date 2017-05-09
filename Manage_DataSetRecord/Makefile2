@@ -1,0 +1,35 @@
+all: clean exec test_expression
+
+exec: task3
+	./task3
+
+task3: testDemo3_2.o expression.o record_manage.o manage_buff.o buf_manager_statistic.o manage_strg.o dbHandler.o
+	gcc testDemo3_2.o expression.o record_manage.o manage_buff.o buf_manager_statistic.o manage_strg.o dbHandler.o -o task3
+
+test_assign3_1.o: testDemo3_2.c helpTest.h dbHandler.h expression.h record_manage.h manage_strg.h buf_manager_statistic.h manage_buff.h
+	gcc -c testDemo3_2.c
+
+manage_buff.o: manage_buff.c dt.h dbHandler.h manage_strg.h buf_manager_statistic.h manage_buff.h
+	gcc -c manage_buff.c
+
+buf_manager_statistic.o: buf_manager_statistic.c manage_buff.h buf_manager_statistic.h
+	gcc -c buf_manager_statistic.c
+
+manage_strg.o: manage_strg.c dbHandler.h manage_strg.h
+	gcc -c manage_strg.c
+
+record_manage.o: record_manage.c record_manage.h dbHandler.h expression.h AllTables.h
+	gcc -c record_manage.c
+
+expression.o: expression.c dbHandler.h AllTables.h
+	gcc -c expression.c
+
+
+test_expression: test_expression.o expression.o rm_serializer.o record_manage.o manage_buff.o buf_manager_statistic.o manage_strg.o dbHandler.o
+	gcc test_expression.o expression.o rm_serializer.o record_manage.o manage_buff.o buf_manager_statistic.o manage_strg.o dbHandler.o -o test_expression
+
+test_expression.o: test_expression.c AllTables.h dbHandler.h expression.h record_manage.h
+	gcc -c test_expression.c
+
+clean:
+	rm -rf *.o
